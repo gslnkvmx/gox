@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package fileservice;
+
+option go_package = "github.com/gslnkvmx/gox/proto/gen";
+
+// Service for uploading files to storage
+service FileService {
+  // Sending file to storage
+  rpc SendFile (SendFileRequest) returns (SendFileResponse);
+
+  // Get file status
+  rpc GetFileStatus (FileStatusRequest) returns (FileStatusResponse);
+}
+
+// Request for sending file
+message SendFileRequest {
+  bytes file_content = 1;  // Binary file content
+  string file_name = 2;    // Name of the file
+  string receiver_name = 3;  // Receiver name
+}
+
+// Response for sending file
+message SendFileResponse {
+  string file_id = 1;      // Unique file id in MinIO
+  string bucket = 2;       // Bucket in MinIO
+  string status = 3;       // "OK" or an error
+}
+
+message FileStatusRequest {
+  string file_id = 1;
+}
+
+message FileStatusResponse {
+  string status = 1;       // "UPLOADED", "DOWNLOADED", "EXPIRED"
+}
